@@ -17,7 +17,7 @@ namespace CSFinalProjectTechAcademy.Controllers
 
         [HttpPost]
         public ActionResult Quote(string firstName, string lastName, string emailAddress, DateTime dateOfBirth,
-                                    int carYear, string carMake, string carModel,int speedingTickets)//, bool dui, bool typeOfCoverage)
+                                    int carYear, string carMake, string carModel,int speedingTickets, bool dui, bool typeOfCoverage)
         {
 
             if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(lastName) || string.IsNullOrEmpty(emailAddress) ||
@@ -37,9 +37,9 @@ namespace CSFinalProjectTechAcademy.Controllers
                     quote.CarYear = carYear;
                     quote.CarMake = carMake;
                     quote.CarModel = carModel;
-                    //quote.DUI = dui;
+                    quote.DUI = dui;
                     quote.SpeedingTickets = speedingTickets;
-                    //quote.TypeOfCoverage = typeOfCoverage;
+                    quote.TypeOfCoverage = typeOfCoverage;
                    
                     int startingPrice = 50;
                     DateTime now = DateTime.Now;
@@ -48,7 +48,7 @@ namespace CSFinalProjectTechAcademy.Controllers
                     { 
                        if (age < 18) //if user is younger than 18
                         {
-                          int price =  startingPrice + 100; // add 100
+                          double price =  startingPrice + 100; // add 100
                             if (carYear < 2000 || carYear > 2015) // if the year of the car is less then 2000 or greater then 2015 
                             {
                                 price += 25; // add 25
@@ -69,15 +69,34 @@ namespace CSFinalProjectTechAcademy.Controllers
                             {
                                 price += 0; // add 0
                             }
-                            //foreach (var tickets in speedingTickets)
-                            //{
-                                
-                            //    price += 10;
-                            //}
+                            if (speedingTickets > 0)
+                            {
+                              price += speedingTickets * 10;
+                            }
+                            else
+                            {
+                                price += 0;
+                            }
+                            if (dui == true) // If user has had a DUI
+                            {
+                                price += (25 / price) * 100; // add 25%
+                            }
+                            else
+                            {
+                                price += 0; // else add 0
+                            }
+                            if (typeOfCoverage == true) // If user is using full coverage
+                            {
+                                price += (50 / price) * 100; // add 50%
+                            }
+                            else
+                            {
+                                price += 0; // else add 0
+                            }
                         }
                        else if (age < 25 || age > 100) // if user is younger than 25 or older then 100
                         {
-                            int price = startingPrice += 25; // add 25
+                            double price = startingPrice += 25; // add 25
                             if (carYear < 2000 || carYear > 2015)// same as if statement starting on line 52
                             {
                                 price += 25;
@@ -88,15 +107,31 @@ namespace CSFinalProjectTechAcademy.Controllers
                             }
                             if (carMake == "Porsche" && carModel == "911 Carrera") //same as if statement starting on line 60
                             {
-                                price += 50; // add 50
+                                price += 50; 
                             }
-                            else if (carMake == "Porsche") //else if the car make is Porsche and the model is not a 911 Carrera
+                            else if (carMake == "Porsche") 
                             {
-                                price += 25; // add 25
+                                price += 25; 
                             }
                             else
                             {
-                                price += 0; // add 0
+                                price += 0; 
+                            }
+                            if (dui == true) // same as if statement starting on line 76
+                            {
+                                price += (25 / price) * 100; // add 25%
+                            }
+                            else
+                            {
+                                price += 0; // else add 0
+                            }
+                            if (typeOfCoverage == true) // If user is using full coverage
+                            {
+                                price += (50 / price) * 100; // add 50%
+                            }
+                            else
+                            {
+                                price += 0; // else add 0
                             }
                         }
                     }
